@@ -1,12 +1,10 @@
 import { addTodo, deleteTodo, getTodos } from "./api.js";
+import { renderLoginComponent } from "./components/login-component.js";
 
-    
-        // TODO: Получать из хранилища данных
         let tasks = [];
     
         let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
 token = null;
-      const host = "https://webdev-hw-api.vercel.app/api/v2/todos";
      
   
         const fetchTodosAndRender = () => {
@@ -20,33 +18,11 @@ token = null;
          const appEl = document.getElementById("app"); 
          
           if (!token){
-            const appHtml =
-              ` <h1>Список задач</h1>
-              <div class="form">
-                    <h3 class="form-title">Форма входа</h3>
-                    <div class="form-row">
-                      Логин
-                      <input type="text" id="login-input"class="input" />
-                        <br/>
-                            Пароль   <input  type="text" id="login-input" class="input" />
-                    </div>
-                    <br />
-                    <button class="button" id="login-button">Вход</button>
-                  </div>`;
-
-
-
-
-    
-         appEl.innerHTML = appHtml;
-
-         document
-         .getElementById("login-button")
-         .addEventListener("click", () => {
-          token = 
-          "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
-         fetchTodosAndRender();
-         });
+            renderLoginComponent({appEl,
+                 setToken: (newToken) => { 
+                token = newToken;
+            }, fetchTodosAndRender,
+            })
             return;
           }
       
@@ -95,10 +71,9 @@ token = null;
     
               const id = deleteButton.dataset.id;
     
-              // подписываемся на успешное завершение запроса с помощью then
+
 deleteTodo({
     token, id}).then((responseData) => {
-                  // получили данные и рендерим их в приложении
                   tasks = responseData.todos;
                   renderApp();
                 });
@@ -111,8 +86,8 @@ deleteTodo({
     
           buttonElement.disabled = true;
           buttonElement.textContent = "Задача добавляется...";
-    
-          // подписываемся на успешное завершение запроса с помощью then
+
+
 addTodo({
     text: textInputElement.value,
     token
@@ -137,7 +112,5 @@ addTodo({
         });
 
         };
-    
-     //   fetchTodosAndRender();
     renderApp();
         
