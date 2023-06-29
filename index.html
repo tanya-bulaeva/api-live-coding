@@ -113,6 +113,7 @@
           buttonElement.disabled = true;
           buttonElement.textContent = "Задача добавляется...";
     
+          
           // подписываемся на успешное завершение запроса с помощью then
           fetch(host, {
             method: "POST",
@@ -144,7 +145,7 @@
               buttonElement.textContent = "Добавить";
             });
         });
-        
+
       </script>
     </html>
 </html>
