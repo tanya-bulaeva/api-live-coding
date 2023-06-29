@@ -6,32 +6,14 @@
   </head>
 
   <body>
-    <h1>Список задач</h1>
-    <ul class="tasks" id="list">
-      <!--Список рендерится из JS-->  
-    </ul>
-    <br />
-    <div class="form">
-      <h3 class="form-title">Форма добавления</h3>
-      <div class="form-row">
-        Что нужно сделать:
-        <input
-          type="text"
-          id="text-input"
-          class="input"
-          placeholder="Выпить кофе"
-        />
-      </div>
-      <br />
-      <button class="button" id="add-button">Добавить</button>
-    </div>
+<div id ="app">
+
+</div>
   </body>
 
-  
+
   <script>
-    const buttonElement = document.getElementById("add-button");
-        const listElement = document.getElementById("list");
-        const textInputElement = document.getElementById("text-input");
+
     
         // TODO: Получать из хранилища данных
         let tasks = [];
@@ -64,6 +46,7 @@
         };
     
         const renderTasks = () => {
+          const appEl = document.getElementById('app');
           const tasksHtml = tasks
             .map((task) => {
               return `<li class="task">
@@ -74,8 +57,55 @@
               </li>`;
             })
             .join("");
+
+const appHtml =
+              ` <div class="form">
+                    <h3 class="form-title">Форма входа</h3>
+                    <div class="form-row">
+                      Логин
+                      <input
+                        type="text"
+                        id="login-input"
+                        class="input"
+                            />
+                        <br/>
+                            Пароль
+                              <input
+                                type="text"
+                                id="login-input"
+                                class="input"
+                                    />
+                    </div>
+                    <br />
+                    <button class="button" id="login-button">Вход</button>
+                  </div>
+                        <h1>Список задач</h1>
+                        <ul class="tasks" id="list">
+                          <!--Список рендерится из JS-->  
+                          ${tasksHtml}
+                        </ul>
+                        <br />
+                            <div class="form">
+                              <h3 class="form-title">Форма добавления</h3>
+                              <div class="form-row">
+                                Что нужно сделать:
+                                <input
+                                  type="text"
+                                  id="text-input"
+                                  class="input"
+                                  placeholder="Выпить кофе"
+                                />
+                              </div>
+                    <br />
+                    <button class="button" id="add-button">Добавить</button>
+                  </div>`
+
+
     
-          listElement.innerHTML = tasksHtml;
+         appEl.innerHTML = appHtml;
+         const buttonElement = document.getElementById("add-button");
+        const listElement = document.getElementById("list");
+        const textInputElement = document.getElementById("text-input");
           const deleteButtons = document.querySelectorAll(".delete-button");
     
           for (const deleteButton of deleteButtons) {
@@ -94,18 +124,14 @@
                 .then((response) => {
                   return response.json();
                 })
-                .then((response) => {
+                .then((responseData) => {
                   // получили данные и рендерим их в приложении
                   tasks = responseData.todos;
                   renderTasks();
                 });
             });
           }
-        };
-    
-        fetchTodosAndRender();
-    
-        buttonElement.addEventListener("click", () => {
+          buttonElement.addEventListener("click", () => {
           if (textInputElement.value === "") {
             return;
           }
@@ -113,7 +139,6 @@
           buttonElement.disabled = true;
           buttonElement.textContent = "Задача добавляется...";
     
-          
           // подписываемся на успешное завершение запроса с помощью then
           fetch(host, {
             method: "POST",
@@ -146,6 +171,11 @@
             });
         });
 
+        };
+    
+        fetchTodosAndRender();
+    
+        
       </script>
     </html>
 </html>
