@@ -1,7 +1,7 @@
-import { loginUser } from "../api.js";
+import { loginUser, registerUser } from "../api.js";
 
 export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
-    let isLoginMode = false;
+    let isLoginMode = true;
 
    const renderForm = () => {
   const appHtml = `
@@ -28,8 +28,8 @@ export function renderLoginComponent({ appEl, setToken, fetchTodosAndRender }) {
   appEl.innerHTML = appHtml;
 
   document.getElementById("login-button").addEventListener("click", () => {
- //   setToken("Bearer asb4c4boc86gasb4c4boc86g37k3bk3cg3c03ck3k37w3cc3bo3b8");
-const login = document.getElementById("login-input").value;
+if (isLoginMode){
+    const login = document.getElementById("login-input").value;
 const password = document.getElementById("password-input").value;
 if (!login){
     alert ("Введите логин");
@@ -41,15 +41,46 @@ if (!password){
 }
     loginUser({
       login: login,
-      password: password,
-    }).then((user) => {
+      password: password}).then((user) => {
       setToken(`Bearer ${user.user.token}`);
       fetchTodosAndRender();
     }).catch((error) => {
         //TODO выводить алерт красиво
         alert (error.message)
     })
+} else {
+  
+    const login = document.getElementById("login-input").value;
+    const name = document.getElementById("name-input").value;
+    const password = document.getElementById("password-input").value;
+    if (!name){
+        alert ("Введите имя");
+        return;
+    }
+    if (!login){
+        alert ("Введите логин");
+        return;
+    }
+    if (!password){
+        alert ("Введите пароль");
+        return;
+    }
+       registerUser({
+          login: login,
+          password: password,
+        name: name,
+    })
+    .then((user) => {
+          setToken(`Bearer ${user.user.token}`);
+          fetchTodosAndRender();
+        }).catch((error) => {
+            //TODO выводить алерт красиво
+            alert (error.message)
+        })
+}
   });
+
+
 
 
   document.getElementById("toggle-button").addEventListener("click", () => {
