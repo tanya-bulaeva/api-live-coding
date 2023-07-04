@@ -1,12 +1,14 @@
 import { addTodo, deleteTodo, getTodos } from "./api.js";
 import { renderLoginComponent } from "./components/login-component.js";
+import { formatDateToRu, formatDateToUs } from "./lib/formatDate/formatDate.js"
+import { format } from "date-fns";
 
         let tasks = [];
     
         let token = "Bearer asb4c4boc86gasb4c4boc86g37w3cc3bo3b83k4g37k3bk3cg3c03ck4k";
 token = null;
      
-  
+
         const fetchTodosAndRender = () => {
          return getTodos({token}).then((responseData) => {
               tasks = responseData.todos;
@@ -16,7 +18,7 @@ token = null;
     
         const renderApp = () => {
          const appEl = document.getElementById("app"); 
-         
+       
           if (!token){
             renderLoginComponent({appEl,
                  setToken: (newToken) => { 
@@ -25,17 +27,26 @@ token = null;
             })
             return;
           }
-      
-          const tasksHtml = tasks
-            .map((task) => {
-              return `<li class="task">
-                <p class="task-text">
-                  ${task.text} (Создал: ${task.user?.name ?? "Неизвестно"})
-                  <button data-id="${task.id}" class="button delete-button">Удалить</button>
-                </p>
-              </li>`;
-            })
-            .join("");
+const country = 'ru';     
+const tasksHtml = tasks
+  .map((task) => {
+		// Вызываем функцию format из date-fns, первый параметр — это дата, которую
+		// хотим отформатировать, второй параметр — это строка: к какому формату
+		// желаем привести дату. Обратите внимание MM — это номер месяца,
+		// mm — это минуты
+    const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
+    return `
+        <li class="task">
+          <p class="task-text">
+            ${task.text} (Создал: ${task.user?.name ?? "Неизвестно"})
+            <button data-id="${
+              task.id
+            }" class="button delete-button">Удалить</button>
+          </p>
+          <p><i>Задача создана: ${createDate}</i></p>
+        </li>`;
+  })
+  .join("");
 
             const appHtml =
               `   <h1>Список задач</h1>
