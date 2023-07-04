@@ -35,6 +35,7 @@ const tasksHtml = tasks
 		// желаем привести дату. Обратите внимание MM — это номер месяца,
 		// mm — это минуты
     const createDate = format(new Date(task.created_at), 'dd/MM/yyyy hh:mm');
+    
     return `
         <li class="task">
           <p class="task-text">
