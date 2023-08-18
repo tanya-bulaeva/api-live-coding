@@ -2,6 +2,7 @@ const host = "https://webdev-hw-api.vercel.app/api/v2/todos";
 export function getTodos({token}){
     return fetch(host, {
             method: "GET",
+            
             headers: {
               Authorization: token,
             },
